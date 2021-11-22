@@ -1,0 +1,19 @@
+{
+  "name": "drip-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron index.js"
+  },
+  "keywords": [],
+  "author": "OguzhanUmutlu",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^16.0.1",
+    "electron-packager": "^15.4.0"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
+  }
+}

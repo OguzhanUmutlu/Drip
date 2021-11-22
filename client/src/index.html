@@ -1,0 +1,295 @@
+<html>
+<head>
+    <title>Drip</title>
+</head>
+<body>
+<span class="close" onclick="window.close()" id="close_button"><img id="x_img" class="x" src="x.png"></span>
+<span id="text"></span><br>
+<span id="fps"></span><br>
+<span id="log"></span>
+<div id="ui" class="ui" hidden>
+    <h1>Drip</h1>
+    <div class="contents">
+        <div id="main_menu_ui" class="main_menu_ui">
+            <button class="main_menu_option" onclick="page = 1">Servers</button>
+            <button class="main_menu_option" onclick="page = 2">Add Server</button>
+            <button class="main_menu_option" onclick="document._pSet()">Settings</button>
+        </div>
+        <div id="settings_ui" class="settings_ui" hidden>
+            <label for="max_fps">Maximum FPS Per Second<br><span id="max_fps_view">?</span> FPS</label><input
+                id="max_fps"
+                min=10
+                max=1000
+                step="10"
+                type="range"
+                class="slider">
+            <button class="submit_settings" type="button" onclick="document.save_settings()">Save Settings</button>
+        </div>
+        <div id="servers_ui" class="servers_ui" hidden></div>
+        <span id="add_server" hidden>
+            <span class="center_align">
+                <label for="name">Server Name</label><br><input id="name">
+            </span><br>
+            <span class="normal_align">
+                <label for="ip">Server Address<span style="color: red">*</span></label><br><input id="ip">
+            </span><br>
+            <span class="right_align">
+                <label for="port">Server Port</label><br><input id="port" type="number"
+                                                                placeholder="19132">
+            </span>
+            <span class="connect" id="connect">Checking...</span>
+            <button class="submit" type="button" onclick="document.add_server()" id="submit"
+                    disabled>Add Server</button>
+        </span>
+        <button class="change_page" type="button" onclick="page = 0" hidden id="change_page">Back</button>
+    </div>
+    <script src="script2.js"></script>
+</div>
+<canvas id="canvas"></canvas>
+<script src="script.js"></script>
+<script src="render.js"></script>
+<style>
+    .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 25px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #04AA6D;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+
+    .settings_ui {
+        position: absolute;
+        top: -40px;
+        left: 145px;
+        width: 120px;
+    }
+
+    .submit_settings {
+        position: absolute;
+        padding: 1%;
+        border: 1px solid black;
+        background: none;
+        left: 12px;
+        top: 110%;
+        width: 100px;
+        height: 100%;
+        font-weight: bold;
+        border-radius: 10%;
+        font-size: 20px;
+    }
+
+    .main_menu_ui {
+        position: absolute;
+        padding: 3px;
+        top: -40px;
+        left: 145px;
+    }
+
+    .main_menu_ui .main_menu_option {
+        border: 1px solid black;
+        width: 120px;
+        margin-top: 10px;
+        border-radius: 10%;
+        background: none;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .main_menu_ui .main_menu_option:hover {
+        background: #11e8b6;
+    }
+
+    .change_page {
+        position: absolute;
+        padding: 1%;
+        border: 1px solid black;
+        background: none;
+        width: 100px;
+        height: 50px;
+        font-weight: bold;
+        border-radius: 10%;
+        font-size: 20px;
+        left: -20px;
+        top: -110px;
+    }
+
+    .close {
+        position: absolute;
+        border: 1px black solid;
+        width: 45px;
+        height: 30px;
+        text-align: center;
+        right: 0;
+        top: 0;
+        background: #3c3f41;
+    }
+
+    .x {
+        position: absolute;
+        text-align: center;
+        right: 18px;
+        top: 10px;
+    }
+
+    .close:hover {
+        background: #e81123;
+    }
+
+    .canvas {
+        position: absolute;
+        border: 1px black solid;
+        left: 0;
+        top: 0;
+    }
+
+    .trash_can {
+        position: absolute;
+        margin-top: -50px;
+        margin-left: 214px;
+        padding: 7px 5px 4px;
+        border: 1px solid black;
+        width: 25px;
+        height: 37px;
+    }
+
+    .servers_ui {
+        position: absolute;
+        width: 530px;
+        height: 180px;
+        left: -70px;
+        top: -30px;
+        overflow-y: scroll;
+    }
+
+    .servers_ui .server {
+        width: 460px;
+        border: 1px solid black;
+        margin-top: 2px;
+        padding-left: 5px;
+        text-align: left;
+    }
+
+    .servers_ui .server .description {
+        font-size: 15px;
+        font-weight: normal;
+        text-align: left;
+    }
+
+    .servers_ui .server .description .ping {
+        position: relative;
+        font-size: 20px;
+        font-weight: normal;
+        left: auto;
+        right: -60%;
+        top: -15px;
+    }
+
+    .ui {
+        border: 5px solid black;
+        border-radius: 10%;
+        position: absolute;
+        left: 25%;
+        width: 30%;
+        height: 50%;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .ui .contents {
+        position: absolute;
+        font-weight: bold;
+        font-size: 20px;
+        top: 40%;
+        text-align: center;
+    }
+
+    .ui .contents .center_align {
+        position: absolute;
+        top: -50px;
+        left: 140px;
+        text-align: center;
+    }
+
+    .ui .contents .normal_align {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        text-align: center;
+    }
+
+    .ui .contents .right_align {
+        position: absolute;
+        top: 20px;
+        left: 280px;
+        text-align: center;
+    }
+
+    input {
+        text-align: center;
+    }
+
+    .connect {
+        position: absolute;
+        background: none;
+        left: 142px;
+        top: 150%;
+        width: 150px;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .ui .contents .submit {
+        position: absolute;
+        padding: 1%;
+        border: 1px solid black;
+        background: none;
+        left: 165px;
+        top: 230%;
+        width: 100px;
+        height: 100%;
+        font-weight: bold;
+        border-radius: 10%;
+        font-size: 20px;
+    }
+
+    .ui .contents .submit:disabled {
+        color: red;
+    }
+
+    .ui .contents .submit:enabled {
+        color: black;
+    }
+
+    .ui .contents .submit:hover {
+        padding: 5%;
+    }
+
+    h1 {
+        font-size: 50px;
+        text-align: center;
+    }
+
+    * {
+        font-family: Calibri, serif;
+        user-select: none;
+    }
+</style>
+</body>
+</html>
