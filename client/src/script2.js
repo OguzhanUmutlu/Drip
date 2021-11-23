@@ -47,7 +47,7 @@ window.onload = async () => {
                 info.secure = info.ip !== "localhost";
                 if (JSON.stringify(info) === JSON.stringify(last)) return;
                 if (current) current.abort();
-                if (!info.port * 1 || info.ip.split("").some(i => !"abcdefghijklmnoprstuvyzqwx0123456789.".includes(i))) return connect.innerHTML = "Invalid server.";
+                if (!info.port * 1 || info.ip.split("").some(i => !"abcdefghijklmnoprstuvyzqwx0123456789.-".includes(i))) return connect.innerHTML = "Invalid server.";
                 connect.innerHTML = "Checking...";
                 last = info;
                 trying = true;
